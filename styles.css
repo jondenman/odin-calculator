@@ -45,9 +45,10 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    font-size: 36px;
+    font-size: 50px;
     font-weight: bold;
     font-family:'digital-clock-font';
+    padding-right: 5px;
 }
 
 button {
