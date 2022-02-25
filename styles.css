@@ -1,0 +1,77 @@
+@font-face{
+    font-family:'digital-clock-font';
+    src: url('fonts/digital-7/digital-7\ \(mono\).ttf');
+}
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-left: 30vw;
+    margin-right: 30vw;
+}
+
+.calculator {
+    flex: 1;
+    background-color: rgb(61, 48, 48);
+    /* width: 20vw; */
+    /* min-height: 95vh; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    /* margin-top: 5px; */
+    /* margin-bottom: 50px; */
+    gap: 5px;
+    padding: 10px;
+}
+
+.flex-row {
+    display: flex;
+    width: 90%;
+    flex: auto;
+    justify-content: center;
+    align-items: center;
+    height: 13%;
+    flex-wrap: nowrap;
+    gap: 2px;
+}
+
+.display {
+    background-color: mediumaquamarine;
+    /* margin-top: 10px; */
+    width: 90%;
+    height: 80px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: 36px;
+    font-weight: bold;
+    font-family:'digital-clock-font';
+}
+
+button {
+    flex: 1 1 0;
+    border: 1px solid black;
+    width: 80px;
+    height: 70px;
+    border-radius: 5%;
+}
+
+.zero {
+    flex: 2 1 0;
+}
+
+.number {
+    background-color: rgb(13, 114, 13);
+    color: rgb(34, 32, 32);
+    font-weight: bold;
+}
+
+.operator {
+    background-color: goldenrod;
+}
+
+.top-blue {
+    background-color: rgb(71, 71, 253);
+}
