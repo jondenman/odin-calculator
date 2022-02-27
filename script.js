@@ -48,6 +48,14 @@ function onClearKeyClick(e) {
 }
 
 function onOperatorKeyClick(e) {
+    let opKey = null;
+    if (e.key) {
+        console.log(e.key + 'inside onOpKeyClick');
+        opKey = document.querySelector(`.operator[data-key="${e.key}"]`);
+        if (!opKey) return;
+    } else {
+        opKey = e.target;
+    }
     if (selectedOperator === '') {
         firstValue = parseFloat(displayContent.textContent);
     } else {
@@ -55,8 +63,7 @@ function onOperatorKeyClick(e) {
         firstValue = result;
         displayContent.textContent = result;
     }
-    
-    selectedOperator = e.target.getAttribute('data-name');
+    selectedOperator = opKey.getAttribute('data-name');
 
     afterOperator = true;
 }
@@ -72,7 +79,7 @@ function onEqualKeyClick(e) {
     result = operate(selectedOperator, firstValue, secondValue);
     length = result.toString().length;
     if (length > 9) {
-        result = result.toFixed(1);
+        result = result.toString().split(0, 6) + 'ER';
     }
     displayContent.textContent = result;
     afterOperator = true;
@@ -95,6 +102,30 @@ function onPercentKeyClick(e) {
         value = 'ERROR';
     }
     displayContent.textContent = value;
+}
+
+function onKeyDown(e) {
+    console.log(e.key);
+    console.log(e.keyCode);
+    if (e.keyCode >= 48 || e.keyCode <= 57) {
+        onNumKeyClick(e);
+    } 
+    if (e.keyCode === 67 || e.keyCode === 27) {
+        onClearKeyClick(e);
+    }
+    if (e.key === '+' || e.key === '-' || e.key === '/' || e.key === '*') {
+        onOperatorKeyClick(e);
+    }
+    if (e.key === '=') {
+        onEqualKeyClick(e);
+    }
+    if (e.key === '%') {
+        onPercentKeyClick(e);
+    }
+    if (e.keyCode === 83) {
+        onSignKeyClick(e);
+    }
+    
 }
 
 function add(a, b) {
@@ -160,4 +191,4 @@ signKey.addEventListener('click', onSignKeyClick);
 const percentKey = calculator.querySelector('#percent');
 percentKey.addEventListener('click', onPercentKeyClick);
 
-window.addEventListener('keydown', onNumKeyClick);
+window.addEventListener('keydown', onKeyDown);
