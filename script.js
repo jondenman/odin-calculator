@@ -7,12 +7,13 @@ let firstValue = null;
 let secondValue = null;
 
 let selectedOperator = '';
+let prevOperator = '';
 
 let afterOperator = false;
 
 function addNumToDisplay(num) {
     let currentLength = displayContent.textContent.length;
-    if (currentLength < 10) {
+    if (currentLength < 9) {
         displayContent.textContent += num;
     }
 }
@@ -22,12 +23,20 @@ function clearDisplay() {
 }
 
 function onNumKeyClick(e) {
+    let numKey = null;
+    if (e.keyCode) {
+        console.log (e.keyCode);
+        numKey = document.querySelector(`.number[data-key="${e.keyCode}"]`);
+        if (!numKey) return;
+    } else {
+        numKey = e.target;
+    }
     if (afterOperator) {
         displayContent.textContent = '';
         afterOperator = false;
     }
-    let className = e.target.getAttribute('class');
-    num = e.target.getAttribute('data-name');
+    let className = numKey.getAttribute('class');
+    num = numKey.getAttribute('data-name');
     addNumToDisplay(num);
 }
 
@@ -39,18 +48,27 @@ function onClearKeyClick(e) {
 }
 
 function onOperatorKeyClick(e) {
-    firstValue = parseFloat(displayContent.textContent);
+    if (selectedOperator === '') {
+        firstValue = parseFloat(displayContent.textContent);
+    } else {
+        result = operate(selectedOperator, firstValue, parseFloat(displayContent.textContent));
+        firstValue = result;
+        displayContent.textContent = result;
+    }
+    
     selectedOperator = e.target.getAttribute('data-name');
-
 
     afterOperator = true;
 }
 
 function onEqualKeyClick(e) {
-    if (firstValue === null || selectedOperator.length < 1) return;
     if (secondValue === null) {
         secondValue = parseFloat(displayContent.textContent);
+    } else {
+        selectedOperator = prevOperator;
     }
+    if (firstValue === null || selectedOperator.length < 1) return;
+    
     result = operate(selectedOperator, firstValue, secondValue);
     length = result.toString().length;
     if (length > 9) {
@@ -59,6 +77,24 @@ function onEqualKeyClick(e) {
     displayContent.textContent = result;
     afterOperator = true;
     firstValue = result;
+    prevOperator = selectedOperator;
+    selectedOperator = '';
+}
+
+function onSignKeyClick(e) {
+    value = parseFloat(displayContent.textContent);
+    value *= -1;
+    displayContent.textContent = value;
+}
+
+function onPercentKeyClick(e) {
+    value = parseFloat(displayContent.textContent);
+    console.log(value);
+    value *= .01;
+    if (value.toString().length > 9) {
+        value = 'ERROR';
+    }
+    displayContent.textContent = value;
 }
 
 function add(a, b) {
@@ -99,6 +135,10 @@ function operate(operator, a, b) {
         default:
             result = 'ERROR';
     }
+    
+    if (result.toString().length > 10) {
+        return `2BIGNOCALC`;
+    }
     return result;
 }
 
@@ -113,3 +153,11 @@ operatorKeys.forEach(key => key.addEventListener('click', onOperatorKeyClick));
 
 const equalKey = calculator.querySelector('.equal');
 equalKey.addEventListener('click', onEqualKeyClick);
+
+const signKey = calculator.querySelector('#sign');
+signKey.addEventListener('click', onSignKeyClick);
+
+const percentKey = calculator.querySelector('#percent');
+percentKey.addEventListener('click', onPercentKeyClick);
+
+window.addEventListener('keydown', onNumKeyClick);
