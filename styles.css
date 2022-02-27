@@ -63,6 +63,7 @@ button {
     font-size: 42px;
     font-weight: bold;
     font-family: 'digital-clock-font';
+    transition: all .07s ease;
     /* text-shadow: 0 0 2px rgb(255, 249, 249); */
     /* -webkit-text-stroke: 1px rgb(226, 221, 221); */
 }
@@ -84,3 +85,9 @@ button {
 .top-blue {
     background-color: rgb(71, 71, 253);
 }
+
+.highlight {
+    transform: scale(1);
+    border-color: #f751f7;
+    box-shadow: 0 0 1rem #f751f7;
+  }

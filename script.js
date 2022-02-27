@@ -25,8 +25,7 @@ function clearDisplay() {
 function onNumKeyClick(e) {
     let numKey = null;
     if (e.keyCode) {
-        console.log (e.keyCode);
-        numKey = document.querySelector(`.number[data-key="${e.keyCode}"]`);
+        numKey = document.querySelector(`.number[data-key="${e.key}"]`);
         if (!numKey) return;
     } else {
         numKey = e.target;
@@ -38,9 +37,13 @@ function onNumKeyClick(e) {
     let className = numKey.getAttribute('class');
     num = numKey.getAttribute('data-name');
     addNumToDisplay(num);
+    numKey.classList.add('highlight');
 }
 
 function onClearKeyClick(e) {
+    const key = calculator.querySelector('#clear');
+    key.classList.add('highlight');
+
     clearDisplay();
     firstValue = null;
     secondValue = null;
@@ -50,7 +53,6 @@ function onClearKeyClick(e) {
 function onOperatorKeyClick(e) {
     let opKey = null;
     if (e.key) {
-        console.log(e.key + 'inside onOpKeyClick');
         opKey = document.querySelector(`.operator[data-key="${e.key}"]`);
         if (!opKey) return;
     } else {
@@ -66,9 +68,13 @@ function onOperatorKeyClick(e) {
     selectedOperator = opKey.getAttribute('data-name');
 
     afterOperator = true;
+    opKey.classList.add('highlight');
 }
 
 function onEqualKeyClick(e) {
+    const key = calculator.querySelector('.equal');
+    key.classList.add('highlight');
+
     if (secondValue === null) {
         secondValue = parseFloat(displayContent.textContent);
     } else {
@@ -86,17 +92,23 @@ function onEqualKeyClick(e) {
     firstValue = result;
     prevOperator = selectedOperator;
     selectedOperator = '';
+    
 }
 
 function onSignKeyClick(e) {
+    const key = calculator.querySelector('#sign');
+    key.classList.add('highlight');
+
     value = parseFloat(displayContent.textContent);
     value *= -1;
     displayContent.textContent = value;
 }
 
 function onPercentKeyClick(e) {
+    const key = calculator.querySelector('#percent');
+    key.classList.add('highlight');
+
     value = parseFloat(displayContent.textContent);
-    console.log(value);
     value *= .01;
     if (value.toString().length > 9) {
         value = 'ERROR';
@@ -105,9 +117,7 @@ function onPercentKeyClick(e) {
 }
 
 function onKeyDown(e) {
-    console.log(e.key);
-    console.log(e.keyCode);
-    if (e.keyCode >= 48 || e.keyCode <= 57) {
+    if (e.key >= 0 || e.key <= 9 || e.key === '.') {
         onNumKeyClick(e);
     } 
     if (e.keyCode === 67 || e.keyCode === 27) {
@@ -125,6 +135,7 @@ function onKeyDown(e) {
     if (e.keyCode === 83) {
         onSignKeyClick(e);
     }
+    
     
 }
 
@@ -173,6 +184,11 @@ function operate(operator, a, b) {
     return result;
 }
 
+function removeTransition(e) {
+    if (e.propertyName !== 'transform') return;
+    this.classList.remove('highlight');
+}
+
 const numKeys = calculator.querySelectorAll('.number');
 numKeys.forEach(key => key.addEventListener('click', onNumKeyClick));
 
@@ -190,5 +206,8 @@ signKey.addEventListener('click', onSignKeyClick);
 
 const percentKey = calculator.querySelector('#percent');
 percentKey.addEventListener('click', onPercentKeyClick);
+
+const allKeys = calculator.querySelectorAll('button');
+allKeys.forEach(key => key.addEventListener('transitionend', removeTransition));
 
 window.addEventListener('keydown', onKeyDown);
