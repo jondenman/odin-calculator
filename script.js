@@ -126,7 +126,7 @@ function onKeyDown(e) {
     if (e.key === '+' || e.key === '-' || e.key === '/' || e.key === '*') {
         onOperatorKeyClick(e);
     }
-    if (e.key === '=') {
+    if (e.key === '=' || e.key === 'Enter') {
         onEqualKeyClick(e);
     }
     if (e.key === '%') {
